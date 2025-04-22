@@ -23,7 +23,7 @@ const customReadFile = (file, res) => {
 
 router.get("/", (req, res) => {
     res.writeHead(httpStatusCodes.OK, plainTextContentType);
-    res.end("Still needs to be implemented");//plain text
+    res.end("Still needs to be implemented...");//plain text
 });
 
 router.get("/index.html", (req, res) => {
