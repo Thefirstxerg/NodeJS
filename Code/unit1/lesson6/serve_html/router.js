@@ -31,7 +31,7 @@ const routes = {
     }
 };
 exports.handle = (req, res) => {
-    try {
+    try {           
         if (routes[req.method][req.url]) {
             routes[req.method][req.url](req, res);
         } else {
