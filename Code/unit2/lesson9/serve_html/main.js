@@ -24,7 +24,7 @@ app.use(express.json());
 //     res.send("Contact information submitted successfully.");
 // });
 
-app.get("/items/:vegetable", homeController.sendReqParam);
+app.get("/item", homeController.sendReqParam);
 
 app.get("/", homeController.showHome);
 

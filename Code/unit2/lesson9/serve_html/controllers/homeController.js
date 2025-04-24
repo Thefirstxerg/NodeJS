@@ -1,6 +1,6 @@
 exports.sendReqParam = (req, res) => {
-    let veg = req.params.vegetable;
-    res.send(`This is the page for ${veg}`);
+    let i = req.params.item;
+    res.send(`This is the page for ${i}`);
 };
 
 exports.sendPost = (req, res) => {
@@ -13,5 +13,5 @@ exports.sendPost = (req, res) => {
 const path = require("path");
 
 exports.showHome = (req, res) => {
-    res.sendFile(path.join(__dirname, "../views/index.html"));
+    res.sendFile(path.join(__dirname, "../views/index.html")); 
 };
