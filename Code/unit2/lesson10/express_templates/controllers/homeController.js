@@ -10,7 +10,9 @@ exports.sendPost = (req, res) => {
 };
 
 exports.respondWithName = (req, res) => {
-    // let paramsName = req.params.myName;
-    // res.render("index", {name: paramsName});
-    res.render("index", {firstName: req.params.myName});
+    let paramsName = req.params.myName;
+    res.render("index", {
+        firstName: paramsName,
+        surName: "" 
+    });
 };

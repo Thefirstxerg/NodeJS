@@ -26,6 +26,14 @@ app.post("/", homeController.sendPost);
 
 app.get("/name/:myName", homeController.respondWithName);
 
+app.get("/", (req, res) => {
+  res.render("index", { firstName: "", surName: "" });
+});
+
+app.get("/contact", (req, res) => {
+  res.render("contact");
+});
+
 app.listen(app.get("port"), () => {
     console.log(`Server running at http://localhost:${app.get("port")}`);
 });
