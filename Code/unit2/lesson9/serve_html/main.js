@@ -26,6 +26,8 @@ app.use(express.json());
 
 app.get("/items/:vegetable", homeController.sendReqParam);
 
+app.get("/", homeController.showHome);
+
 app.post("/", homeController.sendPost);
 
 app.listen(port, () => {

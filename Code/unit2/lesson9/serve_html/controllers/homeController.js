@@ -8,3 +8,10 @@ exports.sendPost = (req, res) => {
     console.log(req.query);
     res.send("POST Successful!");
 };
+
+
+const path = require("path");
+
+exports.showHome = (req, res) => {
+    res.sendFile(path.join(__dirname, "../views/index.html"));
+};
