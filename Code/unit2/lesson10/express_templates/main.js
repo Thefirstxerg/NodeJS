@@ -30,6 +30,10 @@ app.get("/", (req, res) => {
   res.render("index", { firstName: "", surName: "" });
 });
 
+app.post("/contact", (req, res) => {
+  res.render("contact", { successMessage: "Thank you for contacting us!" });
+});
+
 app.get("/contact", (req, res) => {
   res.render("contact");
 });

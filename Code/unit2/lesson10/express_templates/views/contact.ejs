@@ -5,6 +5,9 @@
 </head>
 <body>
   <h1>Contact Us</h1>
+  <% if (typeof successMessage !== 'undefined') { %>
+    <p><%= successMessage %></p>
+  <% } %>
   <form action="/contact" method="post">
     <label>Name:</label>
     <input type="text" name="name">
@@ -14,7 +17,6 @@
     <br>
     <button type="submit">Submit</button>
   </form>
-  <!-- include footer partial -->
   <%- include('partials/footer') %>
 
 </body>
