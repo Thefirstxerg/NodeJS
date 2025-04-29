@@ -5,43 +5,42 @@ const app = express();
 const errorController = require("./controllers/errorController");
 const homeController = require("./controllers/homeController");
 const layouts = require("express-ejs-layouts");
+const mongoose = require("mongoose");
+const Subscriber = require("./models/subscriber");
 
-const MongoDB = require("mongodb").MongoClient;
-const dbURL = "mongodb://0.0.0.0:27017";
-const dbName = "recipe_db";
+//connecting to database
+mongoose.connect("mongodb://0.0.0.0:27017/recipe_db",
+  { useNewUrlParser: true }
+);
 
-MongoDB.connect(dbURL, (error, client) => { //Database Server Connection
-  if (error) throw error;
+const db = mongoose.connection;
 
-  //recipe_db
-  let db = client.db(dbName); //insert a document into our collection
-  db.collection("contacts2").insertMany({
-    name: "Jada Mathele",
-    email: "jada@mathele.com",
-    phone: "123-456-7890",
-    address: {
-      street: "123 Main St",
-      city: "Springfield",
-      state: "IL",
-      zip: "62704"
-    }
-  }, {
-    name: "John Doe",
-    email: ""
-  }, (error, db) => {
-    if (error) throw error;
-    console.log(db);
+db.once("open", () => {
+  console.log("Successfully connected to MongoDB using Mongoose!");
+
+});
+
+//CREATING DOCUMENTS TO SAVE TO DB
+//promises
+Subscriber.create({
+  name: "Jada Mathele",
+  email: "jada@mathele.com"
+})
+  .then((savedDoc) => {
+    console.log(savedDoc);
+  })
+  .catch((err) => {
+    console.log(err);
   });
 
-  //find contacts 
-  //print them to console as an array
-  db.collection("contacts")
-    .find()
-    .toArray((error, data) => {
-      if (error) throw error;
-      console.log(data);
-    });
-});
+const query = Subscriber.find({ name: "Jada Mathele" }).exec();
+query
+  .then(docs => {
+    console.log(docs); // Handle the results
+  })
+  .catch(err => {
+    console.error(err); // Handle errors
+  });
 
 app.set("port", process.env.PORT || 3000);
 app.set("view engine", "ejs");
