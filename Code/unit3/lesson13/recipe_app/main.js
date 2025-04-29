@@ -10,11 +10,11 @@ const MongoDB = require("mongodb").MongoClient;
 const dbURL = "mongodb://0.0.0.0:27017";
 const dbName = "recipe_db";
 
-MongoDB.connect(dbURL, (error, client) => {
+MongoDB.connect(dbURL, (error, client) => { //Database Server Connection
   if (error) throw error;
+
   //recipe_db
-  let db = client.db(dbName);
-  //insert a document into our collection
+  let db = client.db(dbName); //insert a document into our collection
   db.collection("contacts")
   .insert({
     name: "Jada Mathele",
@@ -23,6 +23,7 @@ MongoDB.connect(dbURL, (error, client) => {
     if (error) throw error;
     console.log(db);
   });
+  
   //find contacts 
   //print them to console as an array
   db.collection("contacts")
