@@ -10,9 +10,11 @@ const Subscriber = require("./models/subscriber");
 const subscriberController = require("./controllers/subscribersController");
 
 //connecting to database
-mongoose.connect("mongodb://0.0.0.0:27017/recipe_db",
-  { useNewUrlParser: true }
-);
+mongoose.connect("mongodb://0.0.0.0:27017/recipe_db", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true, // added to suppress deprecation warning
+  useCreateIndex: true, // added to suppress ensureIndex deprecation warning
+});
 
 const db = mongoose.connection;
 

@@ -9,6 +9,8 @@ const subscriberController = require("./controllers/subscribersController");
 
 mongoose.connect("mongodb://0.0.0.0:27017/recipe_db", {
     useNewUrlParser: true,
+    useUnifiedTopology: true, // added to suppress deprecation warning
+    useCreateIndex: true, // added to suppress ensureIndex deprecation warning
 });
 
 const db = mongoose.connection;
@@ -27,10 +29,16 @@ app.use(express.static("public"));
 
 let exampleinstance = new Subscriber({
     name: "Jon",
-    email: "ranssdozzm@gmail.com",
+    email: "ranssdozszm@gmail.com",
     zipCode: 12345,
 });
 
-console.log(exampleinstance.getInfo());
+Subscriber.create(exampleinstance)
+    .then((subscriber) => Subscriber.findOne({ name: "Jon" }))
+    .then((subscriber) => console.log(subscriber.getInfo()))
+    .catch((error) => console.log(error.message));
 
 
+Subscriber.findOne({ name: "Ulrich" })
+    .then((subscriber) => console.log(subscriber.getInfo()))
+    .catch((error) => console.log(error.message))

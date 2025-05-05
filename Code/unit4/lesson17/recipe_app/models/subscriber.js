@@ -11,7 +11,7 @@ const subscriberSchema = mongoose.Schema({
         type: String,
         required: true,
         lowercase: true,
-        unique: true
+        unique: false
     },
     zipCode: {
         type: Number,
@@ -32,5 +32,14 @@ subscriberSchema.methods.findLocalSubscribers = function () {
         .find({ zipCode: this.zipCode })
         .exec();
 };
+
+subscriberSchema.methods.displayCourses = function () {
+    return this.model("Subscriber")
+        .populate(this, "courses")
+        .execPopulate()
+        .then((subscriber) => {
+            return subscriber.courses;
+        });
+}
 
 module.exports = mongoose.model("Subscriber", subscriberSchema);
