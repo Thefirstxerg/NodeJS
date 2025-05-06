@@ -27,11 +27,13 @@ module.exports = {
     });
     newSubscriber
       .save()
-      .then(result => {
+      .then(() => {
         res.render("thanks");
       })
       .catch(error => {
-        if (error) res.send(error);
+        if (error) {
+          res.send(error);
+        }
       });
   },
   new: (req, res) => {
@@ -105,7 +107,8 @@ module.exports = {
   },
   delete: (req, res, next) => {
     let subscriberId = req.params.id;
-    Subscriber.findByIdAndRemove(subscriberId)
+    Subscriber.findByIdAndDelete(subscriberId)
+      .exec()
       .then(() => {
         res.locals.redirect = "/subscribers";
         next();
@@ -118,7 +121,10 @@ module.exports = {
 
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    if (redirectPath) res.redirect(redirectPath);
-    else next();
+    if (redirectPath !== undefined) {
+      res.redirect(redirectPath);
+    } else {
+      res.redirect("/subscribers");
+    }
   }
 };

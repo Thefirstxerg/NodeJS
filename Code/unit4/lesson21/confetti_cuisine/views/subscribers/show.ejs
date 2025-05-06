@@ -32,6 +32,8 @@
     Edit Subscriber Details
   </a>
 </div>
-<div>
-  <a class="button" href="<%= `/subscribers/${subscriber._id}/delete?_method=DELETE` %>" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+<div class="subscriber-actions">
+  <form method="POST" action="/subscribers/<%= subscriber._id %>?_method=DELETE">
+    <button type="submit" class="button" onclick="return confirm('Are you sure you want to delete this record?')">Delete</button>
+  </form>
 </div>
