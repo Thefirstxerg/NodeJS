@@ -1,18 +1,20 @@
-<div class="data-form">
-  <div class="edit-form">
-    <h2 class="center">Edit Subscriber</h2>
-    <form class="form-signin" action="<%=`/subscribers/${subscriber._id}/update?_method=PUT`%>" method="POST">
-      <label for="inputName">Name</label>
-      <input type="text" name="name" id="inputName" class="form-control" value="<%= subscriber.name %>" placeholder="Name" autofocus>
-      <label for="inputEmail">Email address</label>
-      <input type="email" name="email" id="inputEmail" class="form-control" value="<%= subscriber.email %>" placeholder="Email address" required>
-      <label for="inputZipCode">Zip Code</label>
-      <input type="text" name="zipCode" id="inputZipCode" pattern="\d*" class="form-control" value="<%= subscriber.zipCode %>" placeholder="Zip Code" required>
-      <br />
-      <div class="button-group">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
-        <a href="/subscribers" class="btn btn-secondary btn-block" style="margin-top:10px;">Back to Subscribers</a>
-      </div>
-    </form>
-  </div>
+<div class="centered-form">
+  <h2 class="center">Edit Subscriber</h2>
+  <form method="POST" action="<%=`/subscribers/${subscriber._id}/update?_method=PUT`%>">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" name="name" value="<%= subscriber.name %>" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" name="email" value="<%= subscriber.email %>" required>
+    </div>
+    <div class="form-group">
+      <label for="zipCode">Zip Code:</label>
+      <input type="number" name="zipCode" value="<%= subscriber.zipCode %>" required>
+    </div>
+    <div class="button-container">
+      <input type="submit" class="button" value="Update">
+    </div>
+  </form>
 </div>

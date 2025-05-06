@@ -56,7 +56,7 @@ a {
   cursor: pointer;
   display: inline-block;
   color: #fff;
-  margin: 0 10px; /* Add spacing between buttons */
+  margin: 0 5px; /* Add spacing between buttons */
 }
 
 .button:hover {
@@ -94,13 +94,35 @@ a {
   width: 80%;
   margin: 20px auto;
   border-collapse: collapse;
-  text-align: left;
+  table-layout: fixed;
 }
 
 .table th,
 .table td {
   padding: 12px;
   border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.table th {
+  font-weight: bold;
+  color: #625a56;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  width: 30%;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: 40%;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 30%;
+  text-align: center;
 }
 
 h2.center {
@@ -145,4 +167,51 @@ form {
   padding: 8px;
   width: 100%;
   max-width: 300px;
+}
+
+/* Form styling */
+.form-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+  text-align: left;
+  max-width: 600px;
+  margin: 15px auto;
+}
+
+.form-group label {
+  flex: 0 0 100px;
+  text-align: right;
+  padding-right: 20px;
+}
+
+.form-group input {
+  flex: 0 0 300px;
+  padding: 8px;
+}
+
+/* Button alignment */
+.button-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.button-container form {
+  display: inline-block;
+}
+
+/* Center forms */
+.centered-form {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Center view elements */
+.view-container {
+  text-align: center;
+  margin: 20px auto;
+  max-width: 800px;
 }
