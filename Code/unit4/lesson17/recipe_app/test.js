@@ -39,6 +39,6 @@ Subscriber.create(exampleinstance)
     .catch((error) => console.log(error.message));
 
 
-Subscriber.findOne({ name: "Ulrich" })
+Subscriber.findOne({ name: "Chef" })
     .then((subscriber) => console.log(subscriber.getInfo()))
     .catch((error) => console.log(error.message))

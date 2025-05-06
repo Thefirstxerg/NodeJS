@@ -11,7 +11,7 @@ const subscriberSchema = mongoose.Schema({
         type: String,
         required: true,
         lowercase: true,
-        unique: false
+        unique: true
     },
     zipCode: {
         type: Number,
