@@ -9,13 +9,18 @@ const express = require("express"),
   subscribersController = require("./controllers/subscribersController"),
   usersController = require("./controllers/usersController"),
   coursesController = require("./controllers/coursesController"),
-  Subscriber = require("./models/subscriber");
+  Subscriber = require("./models/subscriber"),
+  User = require("./models/user"); // Add User model import
+
 mongoose.Promise = global.Promise;
 
 mongoose.connect(
   "mongodb://0.0.0.0:27017/recipe_db",
-  { useNewUrlParser: true }
+  { useNewUrlParser: true,
+    useUnifiedTopology: true, // added to suppress deprecation warning
+    useCreateIndex: true,}
 );
+
 mongoose.set("useCreateIndex", true);
 
 const db = mongoose.connection;
@@ -53,3 +58,31 @@ app.use(errorController.respondInternalError);
 app.listen(app.get("port"), () => {
   console.log(`Server running at http://localhost:${app.get("port")}`);
 });
+
+
+
+
+Subscriber.create({
+  name: "Jon",
+  email: "someemail@gmail.com",
+  zipCode: 12345
+});
+
+User.create({
+  name: {
+    first: "Jon",
+    last: "Wexler "
+  },
+  email: "jon@jonwexler.com",
+  password: "pass123"
+})
+  .then(user => {
+    return Subscriber.findOne({
+      email: user.email
+    }).then(subscriber => {
+      user.subscribedAccount = subscriber;
+      return user.save();
+    });
+  })
+  .then(() => console.log("user updated"))
+  .catch(error => console.log(error.message));

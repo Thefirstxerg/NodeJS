@@ -1,8 +1,10 @@
 "use strict";
 
-const mongoose = require("mongoose"),
-  { Schema } = mongoose,
-  userSchema = new Schema(
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+const Subscriber = require("./subscriber");
+
+const userSchema = new Schema(
     {
       name: {
         first: {
@@ -40,8 +42,27 @@ const mongoose = require("mongoose"),
     }
   );
 
-userSchema.virtual("fullName").get(function() { 
-//Virtual property is a property that is not stored in MongoDB but is computed from other properties
+userSchema.virtual("fullName").get(function () {
   return `${this.name.first} ${this.name.last}`;
 });
+
+userSchema.pre("save", function (next) {
+  let user = this;
+  if (user.subscribedAccount === undefined) {
+    Subscriber.findOne({
+      email: user.email//link by email address
+    })
+      .then(subscriber => {
+        user.subscribedAccount = subscriber;
+        next();
+      })
+      .catch(error => {
+        console.log(`Error in connecting subscriber: ${error.message}`);
+        next(error);
+      });
+  } else {
+    next();
+  }
+});
+
 module.exports = mongoose.model("User", userSchema);
