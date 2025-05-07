@@ -45,12 +45,12 @@ app.get("/courses", homeController.showCourses);  // Add courses route
 
 // Contact routes
 app.get("/contact", homeController.showSignUp);
-app.post("/contact", subscribersController.saveSubscriber);
+app.post("/contact", subscribersController.create);
 
 // Subscriber routes (order matters)
 app.get("/subscribers/:id/edit", subscribersController.edit);
 app.put("/subscribers/:id/update", subscribersController.update, subscribersController.redirectView);
-app.delete("/subscribers/:id", subscribersController.delete, subscribersController.redirectView); // Changed this line
+app.delete("/subscribers/:id", subscribersController.delete, subscribersController.redirectView);
 app.get("/subscribers/:id", subscribersController.show, subscribersController.showView);
 app.get("/subscribers", subscribersController.index, subscribersController.indexView);
 

@@ -19,26 +19,7 @@ module.exports = {
     res.render("subscribers/index");
   },
 
-  saveSubscriber: (req, res) => {
-    let newSubscriber = new Subscriber({
-      name: req.body.name,
-      email: req.body.email,
-      zipCode: req.body.zipCode
-    });
-    newSubscriber
-      .save()
-      .then(() => {
-        res.render("thanks");
-      })
-      .catch(error => {
-        if (error) {
-          res.send(error);
-        }
-      });
-  },
-  new: (req, res) => {
-    res.render("subscribers/new");
-  },
+
   create: (req, res, next) => {
     let subscriberParams = {
       name: req.body.name,
