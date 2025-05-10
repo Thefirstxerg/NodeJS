@@ -23,6 +23,10 @@ var courseSchema = new Schema(
       type: Number,
       default: 0,
       min: [0, "Course cannot have a negative cost"]
+    },
+    teacher: {
+      type: String,
+      required: true
     }
   },
   {

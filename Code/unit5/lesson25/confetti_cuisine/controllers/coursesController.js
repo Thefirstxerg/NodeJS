@@ -6,7 +6,8 @@ const Course = require("../models/course"),
       title: body.title,
       description: body.description,
       maxStudents: body.maxStudents,
-      cost: body.cost
+      cost: body.cost,
+      teacher: body.teacher
     };
   };
 

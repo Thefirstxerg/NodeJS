@@ -40,19 +40,19 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.get("/", homeController.index);
-app.get("/courses", homeController.showCourses);  // Add courses route
+router.get("/", homeController.index);
+router.get("/courses", homeController.showCourses);  // Add courses route
 
 // Contact routes
-app.get("/contact", homeController.showSignUp);
-app.post("/contact", subscribersController.create);
+router.get("/contact", homeController.showSignUp);
+router.post("/contact", subscribersController.create);
 
 // Subscriber routes (order matters)
-app.get("/subscribers/:id/edit", subscribersController.edit);
-app.put("/subscribers/:id/update", subscribersController.update, subscribersController.redirectView);
-app.delete("/subscribers/:id", subscribersController.delete, subscribersController.redirectView);
-app.get("/subscribers/:id", subscribersController.show, subscribersController.showView);
-app.get("/subscribers", subscribersController.index, subscribersController.indexView);
+router.get("/subscribers/:id/edit", subscribersController.edit);
+router.put("/subscribers/:id/update", subscribersController.update, subscribersController.redirectView);
+router.delete("/subscribers/:id", subscribersController.delete, subscribersController.redirectView);
+router.get("/subscribers/:id", subscribersController.show, subscribersController.showView);
+router.get("/subscribers", subscribersController.index, subscribersController.indexView);
 
 // Error handling
 app.use(errorController.logErrors);
