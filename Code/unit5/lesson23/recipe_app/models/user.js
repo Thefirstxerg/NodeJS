@@ -70,9 +70,7 @@ userSchema.pre("save", function(next) {
 //hashes users password
 userSchema.pre("save", function(next) {
   let user = this;
-  bcrypt
-    .hash(user.password, 10)
-    .then(hash => {
+  bcrypt.hash(user.password, 10).then(hash => {
       user.password = hash;
       next();
     })
