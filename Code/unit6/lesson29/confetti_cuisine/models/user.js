@@ -1,13 +1,11 @@
 "use strict";
 
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-const Subscriber = require("./subscriber");
-const bcrypt = require("bcrypt");
-const passportLocalMongoose = require("passport-local-mongoose");
-const randToken = require("rand-token");
+const mongoose = require("mongoose"),
+  { Schema } = require("mongoose"),
+  passportLocalMongoose = require("passport-local-mongoose"),
+  Subscriber = require("./subscriber");
 
-const userSchema = new Schema(
+var userSchema = new Schema(
   {
     name: {
       first: {
@@ -25,33 +23,29 @@ const userSchema = new Schema(
       lowercase: true,
       unique: true
     },
-    // apiToken: {
-    //   type: String
-    // },
     zipCode: {
       type: Number,
       min: [1000, "Zip code too short"],
       max: 99999
     },
-    courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
-    subscribedAccount: {
-      type: Schema.Types.ObjectId,
-      ref: "Subscriber"
-    }
+    password: {
+      type: String,
+      required: true
+    },
+    subscribedAccount: { type: Schema.Types.ObjectId, ref: "Subscriber" },
+    courses: [{ type: Schema.Types.ObjectId, ref: "Course" }]
   },
   {
     timestamps: true
   }
 );
 
-userSchema.virtual("fullName").get(function () {
+userSchema.virtual("fullName").get(function() {
   return `${this.name.first} ${this.name.last}`;
 });
 
-userSchema.pre("save", function (next) {
+userSchema.pre("save", function(next) {
   let user = this;
-  if (!user.apiToken) user.apiToken = randToken.generate(16);
-  next();
   if (user.subscribedAccount === undefined) {
     Subscriber.findOne({
       email: user.email
@@ -61,7 +55,7 @@ userSchema.pre("save", function (next) {
         next();
       })
       .catch(error => {
-        console.log(`Error in connecting subscriber:${error.message}`);
+        console.log(`Error in connecting subscriber: ${error.message}`);
         next(error);
       });
   } else {
