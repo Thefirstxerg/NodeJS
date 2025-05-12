@@ -115,5 +115,62 @@ module.exports = {
     let redirectPath = res.locals.redirect;
     if (redirectPath !== undefined) res.redirect(redirectPath);
     else next();
+  },
+
+  respondJSON: (req, res) => {
+    res.json({
+      status: 200,
+      data: res.locals
+    });
+  },
+  errorJSON: (error, req, res, next) => {
+    let errorObject;
+    if (error) {
+      errorObject = {
+        status: 500,
+        message: error.message
+      };
+    } else {
+      errorObject = {
+        status: 200,
+        message: "Unknown Error."
+      };
+    }
+    res.json(errorObject);
+  },
+  filterUserCourses: (req, res, next) => {
+    let currentUser = res.locals.currentUser;
+    if (currentUser) {
+      let mappedCourses = res.locals.courses.map(course => {
+        let userJoined = currentUser.courses.some(userCourse => {
+          return userCourse.equals(course._id);
+        });
+        return Object.assign(course.toObject(), { joined: userJoined });
+      });
+      res.locals.courses = mappedCourses;
+      next();
+    } else {
+      next();
+    }
+  },
+  join: (req, res, next) => {
+    let courseId = req.params.id,
+      currentUser = req.user;
+    if (currentUser) {
+      User.findByIdAndUpdate(currentUser, {
+        $addToSet: {
+          courses: courseId
+        }
+      })
+        .then(() => {
+          res.locals.success = true;
+          next();
+        })
+        .catch(error => {
+          next(error);
+        });
+    } else {
+      next(new Error("User must log in."));
+    }
   }
 };
