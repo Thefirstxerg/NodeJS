@@ -25,9 +25,9 @@ const userSchema = new Schema(
       lowercase: true,
       unique: true
     },
-    // apiToken: {
-    //   type: String
-    // },
+    apiToken: {
+      type: String
+    },
     zipCode: {
       type: Number,
       min: [1000, "Zip code too short"],
