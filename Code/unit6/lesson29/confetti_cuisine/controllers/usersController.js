@@ -1,7 +1,11 @@
 "use strict";
 
+
+
 const User = require("../models/user"),
+  httpStatus = require("http-status-codes"),
   passport = require("passport"),
+  
   getUserParams = body => {
     return {
       name: {
@@ -16,7 +20,7 @@ const User = require("../models/user"),
 
 module.exports = {
   index: (req, res, next) => {
-    User.find()
+    User.find({})
       .then(users => {
         res.locals.users = users;
         next();
@@ -161,5 +165,28 @@ module.exports = {
     req.flash("success", "You have been logged out!");
     res.locals.redirect = "/";
     next();
+  },
+
+  respondJSON: (req, res) => {
+    res.json({
+      status: httpStatus.OK,
+      data: res.locals
+    });
+  },
+
+  errorJSON: (error, req, res, next) => {
+    let errorObject;
+    if (error) {
+      errorObject = {
+        status: httpStatus.INTERNAL_SERVER_ERROR,
+        message: error.message
+      };
+    } else {
+      errorObject = {
+        status: httpStatus.INTERNAL_SERVER_ERROR,
+        message: "Unknown Error."
+      };
+    }
+    res.json(errorObject);
   }
 };
