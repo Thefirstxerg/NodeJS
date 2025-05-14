@@ -1,0 +1,32 @@
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins';
+
+// Bootstrap overrides for this template
+.btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 15px 25px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 0;
+  @include mixins.sans-serif-font;
+}
+
+.btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+  &:hover,
+  &:focus,
+  &:active {
+    color: $white;
+    $darkened-primary: color.adjust($primary, $lightness: -7.5%);
+    background-color: $darkened-primary !important;
+    border-color: $darkened-primary !important;
+  }
+}
+
+.btn-lg {
+  font-size: 16px;
+  padding: 25px 35px;
+}
