@@ -1,17 +1,13 @@
 "use strict";
 
 const router = require("express").Router();
-const newUserController = require("../controllers/newUser");
-const storeUserController = require("../controllers/storeUser");
-const loginController = require("../controllers/login");
-const loginUserController = require("../controllers/loginUser");
-const logoutController = require("../controllers/logout");
+const userController = require("../controllers/userController");
 const redirectIfAuthenticatedMiddleware = require("../middleware/redirectIfAuthenticatedMiddleware");
 
-router.get("/register", redirectIfAuthenticatedMiddleware, newUserController);
-router.post("/register", redirectIfAuthenticatedMiddleware, storeUserController);
-router.get("/login", redirectIfAuthenticatedMiddleware, loginController);
-router.post("/login", redirectIfAuthenticatedMiddleware, loginUserController);
-router.get("/logout", logoutController);
+router.get("/register", redirectIfAuthenticatedMiddleware, userController.getRegister);
+router.post("/register", redirectIfAuthenticatedMiddleware, userController.register);
+router.get("/login", redirectIfAuthenticatedMiddleware, userController.getLogin);
+router.post("/login", redirectIfAuthenticatedMiddleware, userController.login);
+router.get("/logout", userController.logout);
 
 module.exports = router;

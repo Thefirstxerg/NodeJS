@@ -1,8 +1,9 @@
 "use strict";
 
 const router = require("express").Router();
+const errorController = require("../controllers/errorController");
 
-// This route catches any unmatched routes and renders the notfound page
-router.use((req, res) => res.render("notfound"));
+router.use(errorController.respondNoResourceFound);
+router.use(errorController.internalServerError);
 
 module.exports = router;
