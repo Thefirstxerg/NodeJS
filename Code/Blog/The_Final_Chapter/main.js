@@ -45,8 +45,16 @@ app.use(session({
 // Flash middleware
 app.use(flash()); // Enables flash messages
 
-global.loggedIn = null;
+// Changed global.loggedIn to res.locals.isLoggedIn 
+// to make it more secure and to follow best practices
 app.use("*", (req, res, next) => {
-    loggedIn = req.session.userId;
+    res.locals.isLoggedIn = Boolean(req.session.userId);
+    res.locals.userId = req.session.userId;
     next();
+});
+
+app.use(fileUpload()); // Any data uploaded via a form will be available in req.files
+
+app.listen(PORT, () => {
+    console.log('App listening on port 4000');
 });
