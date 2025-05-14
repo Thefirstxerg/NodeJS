@@ -3,58 +3,109 @@
 // Imports
 const express = require('express');
 const mongoose = require('mongoose');
-const mongodb = require('mongodb');
 const session = require('express-session');
 const flash = require('connect-flash');
-const ejs = require('ejs');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
+const router = require('./routes'); 
+const User = require('./models/User');
 
-
-//View Engine Setup
 const app = express();
+const PORT = 4000;
+
+// View Engine Setup
 app.set('view engine', 'ejs'); 
 
+// Middleware Setup
 app.use(express.static('public'));
-app.use(bodyParser.json()); // Onload all incoming data as JSON so req.body can be used
-app.use(bodyParser.urlencoded({ 
-    extended: true 
-}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Connect to MongoDB and get rid of depricated warnings
-mongoose.set('strictQuery', false); // Get rid of depricated warnings
-mongoose.connect('mongodb://localhost/my_database', { 
-    useUnifiedTopology: true, 
+// MongoDB Connection
+mongoose.set('strictQuery', false);
+mongoose.connect('mongodb://0.0.0.0:27017/blog_db', { 
     useNewUrlParser: true,
-    useCreateIndex: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
 });
 
-const PORT = 4000; // Port number
-// Session middleware
+// Session Setup
 app.use(session({
     secret: 'place-session-cookie-ID-here',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        httpOnly: true,      // Prevents client-side JS from reading the cookie
-        secure: false,       // Set to true if using HTTPS
-        maxAge: 1000 * 60 * 60 * 24 // 1 day
+        httpOnly: true,
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24
     }
 }));
 
-// Flash middleware
-app.use(flash()); // Enables flash messages
+// Flash Messages
+app.use(flash());
 
-// Changed global.loggedIn to res.locals.isLoggedIn 
-// to make it more secure and to follow best practices
-app.use("*", (req, res, next) => {
-    res.locals.isLoggedIn = Boolean(req.session.userId);
-    res.locals.userId = req.session.userId;
+// File Upload
+app.use(fileUpload());
+
+// Passport Setup
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy({
+    usernameField: 'username'
+}, async (username, password, done) => {
+    try {
+        const user = await User.findOne({ username: username });
+        if (!user) {
+            return done(null, false, { message: 'Incorrect username.' });
+        }
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) {
+            return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+    } catch (err) {
+        return done(err);
+    }
+}));
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err);
+    }
+});
+
+// Authentication Check Middleware
+app.use((req, res, next) => {
+    res.locals.isLoggedIn = req.isAuthenticated();
+    res.locals.user = req.user;
+    res.locals.messages = req.flash();
     next();
 });
 
-app.use(fileUpload()); // Any data uploaded via a form will be available in req.files
+// Routes
+app.use('/', router);
+
+// Error Handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 app.listen(PORT, () => {
-    console.log('App listening on port 4000');
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
