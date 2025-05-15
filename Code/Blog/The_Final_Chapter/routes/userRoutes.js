@@ -9,5 +9,6 @@ router.post("/register", redirectIfAuthenticatedMiddleware, userController.regis
 router.get("/login", redirectIfAuthenticatedMiddleware, userController.getLogin);
 router.post("/login", redirectIfAuthenticatedMiddleware, userController.login);
 router.get("/logout", userController.logout);
+router.get("/profile/:id", userController.getProfile);
 
 module.exports = router;

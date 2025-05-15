@@ -6,19 +6,19 @@
 #mainNav {
   position: absolute;
   border-bottom: 1px solid $gray-200;
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0.7);
   @include mixins.sans-serif-font;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   .navbar-brand {
     font-weight: 800;
-    color: $gray-800;
+    color: white;
   }
   .navbar-toggler {
     font-size: 12px;
     font-weight: 800;
     padding: 13px;
     text-transform: uppercase;
-    color: $gray-800;
+    color: white;
   }
   .navbar-nav {
     > li.nav-item {
@@ -27,6 +27,7 @@
         font-weight: 800;
         letter-spacing: 1px;
         text-transform: uppercase;
+        color: white;
       }
     }
   }
@@ -35,20 +36,20 @@
     background: transparent;
     .navbar-brand {
       padding: 15px 20px;
-      color: color.change($white, $alpha: 0.8);
+      color: white;
       &:focus,
       &:hover {
-        color: color.change($white, $alpha: 0.9);
+        color: fade-out($white, .2);
       }
     }
     .navbar-nav {
       > li.nav-item {
         > a {
           padding: 15px 20px;
-          color: color.change($white, $alpha: 0.8);
+          color: white;
           &:focus,
           &:hover {
-            color: color.change($white, $alpha: 0.9);
+            color: fade-out($white, .2);
           }
         }
       }
@@ -71,8 +72,8 @@
       position: fixed;
       top: -67px;
       transition: transform 0.2s;
-      border-bottom: 1px solid color.adjust($white, $lightness: -0.05%);
-      background-color: color.change($white, $alpha: 0.9);
+      border-bottom: 1px solid darken($white, .05);
+      background-color: fade-in($white, .9);
       .navbar-brand {
         color: $gray-900;
         &:focus,
@@ -94,10 +95,6 @@
     }
     &.is-visible {
       /* if the user changes the scrolling direction, we show the header */
-      -webkit-transform: translate3d(0, 100%, 0);
-      -moz-transform: translate3d(0, 100%, 0);
-      -ms-transform: translate3d(0, 100%, 0);
-      -o-transform: translate3d(0, 100%, 0);
       transform: translate3d(0, 100%, 0);
     }
   }

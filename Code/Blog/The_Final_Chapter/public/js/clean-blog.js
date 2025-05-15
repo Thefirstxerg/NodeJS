@@ -38,4 +38,52 @@
       });
   }
 
+  // Dynamic navbar text contrast based on background image
+  function setNavbarTextContrast() {
+    var nav = document.getElementById('mainNav');
+    if (!nav) return;
+    var style = getComputedStyle(nav);
+    var bgImg = style.backgroundImage;
+    if (!bgImg || bgImg === 'none') return;
+
+    // Extract image URL
+    var urlMatch = bgImg.match(/url\(["']?(.+?)["']?\)/);
+    if (!urlMatch) return;
+    var imgUrl = urlMatch[1];
+
+    var img = new window.Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = imgUrl;
+    img.onload = function() {
+      // Create canvas to sample the image
+      var canvas = document.createElement('canvas');
+      canvas.width = nav.offsetWidth;
+      canvas.height = nav.offsetHeight;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      var r=0, g=0, b=0, count=0;
+      for (var i = 0; i < imageData.length; i += 4) {
+        r += imageData[i];
+        g += imageData[i+1];
+        b += imageData[i+2];
+        count++;
+      }
+      r = Math.round(r/count);
+      g = Math.round(g/count);
+      b = Math.round(b/count);
+      // Calculate luminance
+      var luminance = (0.299*r + 0.587*g + 0.114*b)/255;
+      var textColor = luminance > 0.5 ? '#222' : '#fff';
+      var navLinks = nav.querySelectorAll('.navbar-brand, .navbar-nav > li.nav-item > a');
+      navLinks.forEach(function(el) {
+        el.style.color = textColor;
+        el.style.textShadow = luminance > 0.5 ? '1px 1px 2px #fff' : '1px 1px 2px #000';
+      });
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', setNavbarTextContrast);
+  window.addEventListener('resize', setNavbarTextContrast);
+
 })(jQuery); // End of use strict

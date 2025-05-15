@@ -27,8 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // MongoDB Connection
 mongoose.set('strictQuery', false);
 mongoose.connect('mongodb://0.0.0.0:27017/blog_db', { 
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => {
@@ -50,6 +49,13 @@ app.use(session({
 
 // Flash Messages
 app.use(flash());
+
+// Make flash messages available in views
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 // File Upload
 app.use(fileUpload());
@@ -91,6 +97,9 @@ passport.deserializeUser(async (id, done) => {
 
 // Authentication Check Middleware
 app.use((req, res, next) => {
+    if (req.isAuthenticated()) {
+        req.session.userId = req.user._id; // Set userId in session when authenticated
+    }
     res.locals.isLoggedIn = req.isAuthenticated();
     res.locals.user = req.user;
     res.locals.messages = req.flash();
